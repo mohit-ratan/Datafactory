@@ -1,0 +1,9 @@
+{
+	"name": "datafactory-ADFDatabricksDev001",
+	"location": "southindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "045d5119-3a59-441e-8098-669d3424cff0",
+		"tenantId": "f1a61ec2-d830-4c11-ae3f-096bd73d22b7"
+	}
+}
