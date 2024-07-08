@@ -4,7 +4,8 @@
 		"description": "To copy the files from input to output in blob",
 		"activities": [
 			{
-				"name": "Copy data1",
+				"name": "Copy data input to output",
+				"description": "To copy the data from input to output in blob",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -20,7 +21,10 @@
 						"type": "BinarySource",
 						"storeSettings": {
 							"type": "AzureBlobStorageReadSettings",
-							"recursive": true
+							"recursive": false,
+							"modifiedDatetimeStart": "2024-07-07T00:00:00.000Z",
+							"modifiedDatetimeEnd": null,
+							"deleteFilesAfterCompletion": false
 						},
 						"formatSettings": {
 							"type": "BinaryReadSettings"
@@ -29,7 +33,8 @@
 					"sink": {
 						"type": "BinarySink",
 						"storeSettings": {
-							"type": "AzureBlobStorageWriteSettings"
+							"type": "AzureBlobStorageWriteSettings",
+							"copyBehavior": "FlattenHierarchy"
 						}
 					},
 					"enableStaging": false
