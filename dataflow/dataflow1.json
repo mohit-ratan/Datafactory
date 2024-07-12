@@ -17,6 +17,27 @@
 						"type": "DatasetReference"
 					},
 					"name": "source2"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_blob_input_json_drivers",
+						"type": "DatasetReference"
+					},
+					"name": "source3"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_input_races_csv",
+						"type": "DatasetReference"
+					},
+					"name": "source4"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_blob_input_circuit",
+						"type": "DatasetReference"
+					},
+					"name": "source5"
 				}
 			],
 			"sinks": [],
@@ -47,6 +68,21 @@
 				},
 				{
 					"name": "filter1"
+				},
+				{
+					"name": "parse1"
+				},
+				{
+					"name": "stringify1"
+				},
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "pivot1"
+				},
+				{
+					"name": "unpivot1"
 				}
 			],
 			"scriptLines": [
@@ -74,6 +110,34 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source2",
+				"source(output(",
+				"          id as integer,",
+				"          name as string,",
+				"          skills as string,",
+				"          address as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'singleDocument') ~> source3",
+				"source(output(",
+				"          id as string,",
+				"          name as string,",
+				"          gender as string,",
+				"          dept as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source4",
+				"source(output(",
+				"          PO as string,",
+				"          Vendor as string,",
+				"          Apple as string,",
+				"          Mango as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source5",
 				"source1 rank(desc(SALARY, true),",
 				"     output(rank as long),",
 				"     dense: true) ~> rank1",
@@ -102,7 +166,35 @@
 				"source1, source2 assert(expectExists(source1@DEPARTMENT_ID == source2@DEPARTMENT_ID, false, 'DateTrue'),",
 				"     expectUnique(EMPLOYEE_ID, false, 'Duplicates'),",
 				"     expectTrue(!isNull(toDate(HIRE_DATE, 'MM/dd/yyyy')), false, 'assert3')) ~> assert1",
-				"assert1 filter(isError()) ~> filter1"
+				"assert1 filter(isError()) ~> filter1",
+				"source3 parse(skillsUpdated = skills ? (skill1 as string,",
+				"          skill2 as string,",
+				"          skill3 as string),",
+				"     format: 'delimited',",
+				"     columnNamesAsHeader: false,",
+				"     columnDelimiter: ',',",
+				"     nullValue: '') ~> parse1",
+				"parse1 stringify(skillsUpdated = skillsUpdated ? string,",
+				"     format: 'delimited',",
+				"     columnNamesAsHeader: false,",
+				"     columnDelimiter: ',',",
+				"     nullValue: '') ~> stringify1",
+				"source4 aggregate(groupBy(dept,",
+				"          gender),",
+				"     count = count()) ~> aggregate1",
+				"source4 pivot(groupBy(dept),",
+				"     pivotBy(gender),",
+				"     {} = count(),",
+				"     columnNaming: '$N$V',",
+				"     lateral: true) ~> pivot1",
+				"source5 unpivot(output(",
+				"          Fruits as string,",
+				"          TotalFruits as string",
+				"     ),",
+				"     ungroupBy(PO,",
+				"          Vendor),",
+				"     lateral: true,",
+				"     ignoreNullPivots: false) ~> unpivot1"
 			]
 		}
 	}
