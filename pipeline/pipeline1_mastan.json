@@ -106,6 +106,7 @@
 														"storeSettings": {
 															"type": "AzureBlobStorageReadSettings",
 															"recursive": true,
+															"wildcardFileName": "*.csv",
 															"enablePartitionDiscovery": false
 														},
 														"formatSettings": {
@@ -169,6 +170,7 @@
 														"storeSettings": {
 															"type": "AzureBlobStorageReadSettings",
 															"recursive": true,
+															"wildcardFileName": "*.json",
 															"enablePartitionDiscovery": false
 														},
 														"formatSettings": {
@@ -222,6 +224,7 @@
 														"storeSettings": {
 															"type": "AzureBlobStorageReadSettings",
 															"recursive": true,
+															"wildcardFileName": "*.parquet",
 															"enablePartitionDiscovery": false
 														},
 														"formatSettings": {
