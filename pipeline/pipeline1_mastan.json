@@ -81,7 +81,7 @@
 							"userProperties": [],
 							"typeProperties": {
 								"on": {
-									"value": "@item().name",
+									"value": "@split(item().name, '.')[1]",
 									"type": "Expression"
 								},
 								"cases": [
@@ -164,8 +164,40 @@
 												},
 												"userProperties": [],
 												"typeProperties": {
+													"source": {
+														"type": "JsonSource",
+														"storeSettings": {
+															"type": "AzureBlobStorageReadSettings",
+															"recursive": true,
+															"enablePartitionDiscovery": false
+														},
+														"formatSettings": {
+															"type": "JsonReadSettings"
+														}
+													},
+													"sink": {
+														"type": "JsonSink",
+														"storeSettings": {
+															"type": "AzureBlobFSWriteSettings"
+														},
+														"formatSettings": {
+															"type": "JsonWriteSettings"
+														}
+													},
 													"enableStaging": false
-												}
+												},
+												"inputs": [
+													{
+														"referenceName": "ds_blob_input_json",
+														"type": "DatasetReference"
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "ds_dl_bronze_json",
+														"type": "DatasetReference"
+													}
+												]
 											}
 										]
 									},
@@ -185,8 +217,48 @@
 												},
 												"userProperties": [],
 												"typeProperties": {
-													"enableStaging": false
-												}
+													"source": {
+														"type": "ParquetSource",
+														"storeSettings": {
+															"type": "AzureBlobStorageReadSettings",
+															"recursive": true,
+															"enablePartitionDiscovery": false
+														},
+														"formatSettings": {
+															"type": "ParquetReadSettings"
+														}
+													},
+													"sink": {
+														"type": "ParquetSink",
+														"storeSettings": {
+															"type": "AzureBlobFSWriteSettings"
+														},
+														"formatSettings": {
+															"type": "ParquetWriteSettings"
+														}
+													},
+													"enableStaging": false,
+													"translator": {
+														"type": "TabularTranslator",
+														"typeConversion": true,
+														"typeConversionSettings": {
+															"allowDataTruncation": true,
+															"treatBooleanAsNumber": false
+														}
+													}
+												},
+												"inputs": [
+													{
+														"referenceName": "ds_blob_input_parquet",
+														"type": "DatasetReference"
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "ds_dl_bronze_parquet",
+														"type": "DatasetReference"
+													}
+												]
 											}
 										]
 									}
