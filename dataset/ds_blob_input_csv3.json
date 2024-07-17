@@ -1,31 +1,15 @@
 {
-	"name": "ds_blob_input_csv2",
+	"name": "ds_blob_input_csv3",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_blob_dev",
 			"type": "LinkedServiceReference"
-		},
-		"parameters": {
-			"fileName": {
-				"type": "string"
-			},
-			"directory": {
-				"type": "string"
-			}
 		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": {
-					"value": "@dataset().fileName",
-					"type": "Expression"
-				},
-				"folderPath": {
-					"value": "@dataset().directory",
-					"type": "Expression"
-				},
 				"container": "input"
 			},
 			"columnDelimiter": ",",
