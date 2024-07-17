@@ -1,5 +1,5 @@
 {
-	"name": "pipeline1",
+	"name": "pipeline_variablesandparams",
 	"properties": {
 		"activities": [
 			{
@@ -139,6 +139,30 @@
 						"type": "DelimitedTextReadSettings"
 					}
 				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "ForEach1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "fileNamesIngested",
+					"value": {
+						"value": "@variables('fileNamelist')",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"parameters": {
@@ -155,6 +179,9 @@
 				"type": "String"
 			},
 			"fileNamelist": {
+				"type": "Array"
+			},
+			"fileNamesIngested": {
 				"type": "Array"
 			}
 		},
