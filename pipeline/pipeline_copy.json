@@ -98,14 +98,7 @@
 						{
 							"name": "Set variable1",
 							"type": "SetVariable",
-							"dependsOn": [
-								{
-									"activity": "Filter1",
-									"dependencyConditions": [
-										"Succeeded"
-									]
-								}
-							],
+							"dependsOn": [],
 							"policy": {
 								"secureOutput": false,
 								"secureInput": false
@@ -135,22 +128,6 @@
 								"variableName": "fileNamelist",
 								"value": {
 									"value": "@item().name",
-									"type": "Expression"
-								}
-							}
-						},
-						{
-							"name": "Filter1",
-							"type": "Filter",
-							"dependsOn": [],
-							"userProperties": [],
-							"typeProperties": {
-								"items": {
-									"value": "@item().name",
-									"type": "Expression"
-								},
-								"condition": {
-									"value": "@startswith(item().name, 'd')",
 									"type": "Expression"
 								}
 							}
@@ -257,6 +234,15 @@
 						}
 					]
 				}
+			},
+			{
+				"name": "Until1",
+				"type": "Until",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"timeout": "0.12:00:00"
+				}
 			}
 		],
 		"parameters": {
@@ -280,6 +266,15 @@
 			},
 			"check": {
 				"type": "String"
+			},
+			"fileNamesList": {
+				"type": "Array"
+			},
+			"counter": {
+				"type": "Integer"
+			},
+			"countervalidation": {
+				"type": "Integer"
 			}
 		},
 		"folder": {
