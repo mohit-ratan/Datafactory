@@ -32,7 +32,31 @@
 							"typeProperties": {
 								"variableName": "countervalidation",
 								"value": {
-									"value": "@add(int(variables('counter')),1)",
+									"value": "@string(add(int(variables('counter')),1))",
+									"type": "Expression"
+								}
+							}
+						},
+						{
+							"name": "Set variable4",
+							"type": "SetVariable",
+							"dependsOn": [
+								{
+									"activity": "Set variable2",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"policy": {
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "counter",
+								"value": {
+									"value": "@variables('countervalidation')",
 									"type": "Expression"
 								}
 							}
@@ -125,7 +149,7 @@
 						"type": "Expression"
 					},
 					"condition": {
-						"value": "@or(startswith(item(), 'employee'), startswith(item(), 'products'))",
+						"value": "@or(startswith(item().name, 'employee'), startswith(item().name, 'products'))",
 						"type": "Expression"
 					}
 				}
