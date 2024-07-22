@@ -151,6 +151,30 @@
 						}
 					]
 				}
+			},
+			{
+				"name": "Set variable2",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "ForEach1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "fileNamesfinalList",
+					"value": {
+						"value": "@variables('fileNamescopied')",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"variables": {
@@ -158,6 +182,9 @@
 				"type": "String"
 			},
 			"fileNamescopied": {
+				"type": "Array"
+			},
+			"fileNamesfinalList": {
 				"type": "Array"
 			}
 		},
