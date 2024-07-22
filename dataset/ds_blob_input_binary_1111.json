@@ -1,0 +1,26 @@
+{
+	"name": "ds_blob_input_binary_1111",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_blob_dev",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"fileNameinput": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": {
+					"value": "@dataset().fileNameinput",
+					"type": "Expression"
+				},
+				"container": "input"
+			}
+		}
+	}
+}
