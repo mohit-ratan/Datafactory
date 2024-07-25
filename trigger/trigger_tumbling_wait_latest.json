@@ -2,7 +2,7 @@
 	"name": "trigger_tumbling_wait_latest",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Started",
+		"runtimeState": "Stopped",
 		"pipeline": {
 			"pipelineReference": {
 				"referenceName": "pipeline_wait_latest",
