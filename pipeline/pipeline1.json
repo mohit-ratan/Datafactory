@@ -177,9 +177,16 @@
 				}
 			}
 		],
+		"parameters": {
+			"checkParam": {
+				"type": "string",
+				"defaultValue": "123"
+			}
+		},
 		"variables": {
 			"fileName": {
-				"type": "String"
+				"type": "String",
+				"defaultValue": "stores.csv"
 			},
 			"fileNamescopied": {
 				"type": "Array"
