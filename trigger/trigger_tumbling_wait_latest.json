@@ -19,7 +19,16 @@
 			"retryPolicy": {
 				"intervalInSeconds": 30
 			},
-			"dependsOn": []
+			"dependsOn": [
+				{
+					"type": "TumblingWindowTriggerDependencyReference",
+					"offset": "-0.00:01:00",
+					"referenceTrigger": {
+						"referenceName": "trigger_tumbling_wait",
+						"type": "TriggerReference"
+					}
+				}
+			]
 		}
 	}
 }
