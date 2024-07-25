@@ -1,0 +1,24 @@
+{
+	"name": "trigger_scheduled_pl_wait",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "pipeline_wait",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Minute",
+				"interval": 15,
+				"startTime": "2024-07-25T12:00:00",
+				"timeZone": "India Standard Time"
+			}
+		}
+	}
+}
