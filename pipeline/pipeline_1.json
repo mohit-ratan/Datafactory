@@ -70,6 +70,93 @@
 									"type": "Expression"
 								}
 							}
+						},
+						{
+							"name": "Switch1",
+							"type": "Switch",
+							"dependsOn": [
+								{
+									"activity": "Set variable1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"on": {
+									"value": "@split(item().name, '.')[1]",
+									"type": "Expression"
+								},
+								"cases": [
+									{
+										"value": "txt",
+										"activities": [
+											{
+												"name": "Set variable2",
+												"type": "SetVariable",
+												"dependsOn": [],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "fileNametxt",
+													"value": {
+														"value": "@variables('fileNamechecking')",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									},
+									{
+										"value": "json",
+										"activities": [
+											{
+												"name": "Set variable2_copy1",
+												"type": "SetVariable",
+												"dependsOn": [],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "fileNamejson",
+													"value": {
+														"value": "@variables('fileNamechecking')",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									},
+									{
+										"value": "parquet",
+										"activities": [
+											{
+												"name": "Set variable2_copy2",
+												"type": "SetVariable",
+												"dependsOn": [],
+												"policy": {
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"variableName": "fileNameparquet",
+													"value": {
+														"value": "@variables('fileNamechecking')",
+														"type": "Expression"
+													}
+												}
+											}
+										]
+									}
+								]
+							}
 						}
 					]
 				}
@@ -77,6 +164,18 @@
 		],
 		"variables": {
 			"fileNamechecking": {
+				"type": "String"
+			},
+			"fileName": {
+				"type": "String"
+			},
+			"fileNametxt": {
+				"type": "String"
+			},
+			"fileNamejson": {
+				"type": "String"
+			},
+			"fileNameparquet": {
 				"type": "String"
 			}
 		},
