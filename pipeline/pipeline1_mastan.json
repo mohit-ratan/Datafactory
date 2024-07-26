@@ -242,7 +242,10 @@
 															"referenceName": "ls_blob_dev",
 															"type": "LinkedServiceReference"
 														},
-														"path": "logs"
+														"path": {
+															"value": "logs",
+															"type": "Expression"
+														}
 													},
 													"enableLogging": true,
 													"storeSettings": {
