@@ -409,7 +409,7 @@
 														"referenceName": "ds_blob_landing_json",
 														"type": "DatasetReference"
 													},
-													"enableLogging": true,
+													"enableLogging": false,
 													"storeSettings": {
 														"type": "AzureBlobStorageReadSettings",
 														"recursive": true,
