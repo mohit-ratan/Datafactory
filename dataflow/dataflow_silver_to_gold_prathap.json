@@ -22,6 +22,10 @@
 			],
 			"sinks": [
 				{
+					"dataset": {
+						"referenceName": "ls_sqldbdev",
+						"type": "DatasetReference"
+					},
 					"name": "sink1"
 				}
 			],
@@ -43,6 +47,9 @@
 				},
 				{
 					"name": "select2"
+				},
+				{
+					"name": "AlterRow1"
 				}
 			],
 			"scriptLines": [
@@ -80,10 +87,17 @@
 				"     skipDuplicateMapOutputs: true) ~> select1",
 				"join2 select(skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select2",
-				"join4 sink(allowSchemaDrift: true,",
+				"join4 alterRow(upsertIf(true())) ~> AlterRow1",
+				"AlterRow1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:true,",
+				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
 			]
 		}
 	}
