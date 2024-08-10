@@ -1,0 +1,83 @@
+{
+	"name": "dataflow_bronze_to_silver_prathap",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"name": "source1"
+				},
+				{
+					"name": "source2"
+				},
+				{
+					"name": "source3"
+				},
+				{
+					"name": "source4"
+				},
+				{
+					"name": "source5"
+				}
+			],
+			"sinks": [
+				{
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "cast1"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "split1"
+				},
+				{
+					"name": "aggregate1"
+				}
+			],
+			"scriptLines": [
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false) ~> source1",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false) ~> source2",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false) ~> source3",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false) ~> source4",
+				"source(allowSchemaDrift: true,",
+				"     validateSchema: false) ~> source5",
+				"source1 derive(Ingestion_date = ERROR_FUNCTION(''),",
+				"          Ingestin_timestamp = ERROR_FUNCTION(''),",
+				"          Ingested_By = ERROR_FUNCTION('')) ~> derivedColumn1",
+				"derivedColumn1 cast(output(",
+				"          Ingestion_date as date",
+				"     ),",
+				"     errors: true) ~> cast1",
+				"cast1 select(mapColumn(",
+				"          Ingestion_date,",
+				"          Ingestin_timestamp,",
+				"          Ingested_By",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 split(!isNull(Ingested_By),",
+				"     disjoint: false) ~> split1@(CleansedData, ErroredOut)",
+				"split1@CleansedData aggregate(groupBy(Ingestion_date,",
+				"          Ingested_By,",
+				"          Ingestin_timestamp),",
+				"     count = count()) ~> aggregate1",
+				"aggregate1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}

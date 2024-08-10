@@ -10,6 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
+				"folderPath": "@formatDateTime(utcNow(), 'yyyy/MM/dd')",
 				"container": "archive"
 			}
 		},
