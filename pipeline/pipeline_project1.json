@@ -70,14 +70,14 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "ds_dl_bronze_binary",
+						"referenceName": "ds_blob_landing_binary",
 						"type": "DatasetReference"
 					},
 					"fieldList": [
 						"childItems"
 					],
 					"storeSettings": {
-						"type": "AzureBlobFSReadSettings",
+						"type": "AzureBlobStorageReadSettings",
 						"enablePartitionDiscovery": false
 					},
 					"formatSettings": {
@@ -115,7 +115,7 @@
 								},
 								"cases": [
 									{
-										"value": "csv",
+										"value": "txt",
 										"activities": [
 											{
 												"name": "Copy data landing to bronze csv",
@@ -135,7 +135,7 @@
 														"storeSettings": {
 															"type": "AzureBlobStorageReadSettings",
 															"recursive": true,
-															"wildcardFileName": "*csv",
+															"wildcardFileName": "*txt",
 															"enablePartitionDiscovery": false
 														},
 														"formatSettings": {
@@ -201,7 +201,7 @@
 														"storeSettings": {
 															"type": "AzureBlobStorageReadSettings",
 															"recursive": true,
-															"wildcardFileName": "*csv",
+															"wildcardFileName": "*txt",
 															"enablePartitionDiscovery": false
 														},
 														"formatSettings": {
@@ -270,7 +270,7 @@
 													"storeSettings": {
 														"type": "AzureBlobStorageReadSettings",
 														"recursive": true,
-														"wildcardFileName": "*csv",
+														"wildcardFileName": "*txt",
 														"enablePartitionDiscovery": false
 													}
 												}
