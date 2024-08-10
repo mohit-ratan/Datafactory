@@ -1,0 +1,39 @@
+{
+	"name": "ds_blob_archive_csv_lt",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_blob_dev",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "archive"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "PO",
+				"type": "String"
+			},
+			{
+				"name": "Vendor",
+				"type": "String"
+			},
+			{
+				"name": "Apple",
+				"type": "String"
+			},
+			{
+				"name": "Mango",
+				"type": "String"
+			}
+		]
+	}
+}

@@ -1,0 +1,17 @@
+{
+	"name": "ds_blob_input_binary_lt",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_blob_dev",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "input"
+			}
+		}
+	}
+}

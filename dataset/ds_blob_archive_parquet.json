@@ -1,0 +1,19 @@
+{
+	"name": "ds_blob_archive_parquet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_blob_dev",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "archive"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	}
+}

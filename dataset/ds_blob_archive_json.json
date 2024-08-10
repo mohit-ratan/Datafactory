@@ -1,0 +1,18 @@
+{
+	"name": "ds_blob_archive_json",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_blob_dev",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "archive"
+			}
+		},
+		"schema": {}
+	}
+}

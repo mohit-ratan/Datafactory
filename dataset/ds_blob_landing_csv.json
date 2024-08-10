@@ -1,0 +1,21 @@
+{
+	"name": "ds_blob_landing_csv",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_blob_dev",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
