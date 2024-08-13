@@ -1,0 +1,38 @@
+{
+	"name": "ds_dl_bronze_stores",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_AzureDataLakeStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "stores.json",
+				"fileSystem": "bronze"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"STORE_ID": {
+					"type": "string"
+				},
+				"STORE_NAME": {
+					"type": "string"
+				},
+				"WEB_ADDRESS": {
+					"type": "string"
+				},
+				"LATITUDE": {
+					"type": "string"
+				},
+				"LONGITUDE": {
+					"type": "string"
+				}
+			}
+		}
+	}
+}

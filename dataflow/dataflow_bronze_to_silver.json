@@ -1,0 +1,241 @@
+{
+	"name": "dataflow_bronze_to_silver",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_dl_bronze_oreder_items",
+						"type": "DatasetReference"
+					},
+					"name": "OrderItems"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_dl_bronze_customers",
+						"type": "DatasetReference"
+					},
+					"name": "Customers"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_dl_bronze_product",
+						"type": "DatasetReference"
+					},
+					"name": "Products"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_dl_bronze_stores",
+						"type": "DatasetReference"
+					},
+					"name": "Stores"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_dl_bronze_order",
+						"type": "DatasetReference"
+					},
+					"name": "Orders"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_dl_silver_order_items",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_dl_silver_customer",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_dl_silver_product",
+						"type": "DatasetReference"
+					},
+					"name": "sink3"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_dl_silver_store",
+						"type": "DatasetReference"
+					},
+					"name": "sink4"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_dl_silver_order",
+						"type": "DatasetReference"
+					},
+					"name": "sink5"
+				}
+			],
+			"transformations": [
+				{
+					"name": "casttochangedatatype"
+				},
+				{
+					"name": "cast1"
+				},
+				{
+					"name": "cast2"
+				},
+				{
+					"name": "cast3"
+				},
+				{
+					"name": "cast4"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "derivedColumn2"
+				},
+				{
+					"name": "derivedColumn3"
+				},
+				{
+					"name": "derivedColumn4"
+				},
+				{
+					"name": "derivedColumn5"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          ORDER_ID as string,",
+				"          LINE_ITEM_ID as string,",
+				"          PRODUCT_ID as string,",
+				"          UNIT_PRICE as string,",
+				"          QUANTITY as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> OrderItems",
+				"source(output(",
+				"          CUSTOMER_ID as string,",
+				"          FULL_NAME as string,",
+				"          EMAIL_ADDRESS as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'documentPerLine') ~> Customers",
+				"source(output(",
+				"          PRODUCT_ID as string,",
+				"          PRODUCT_NAME as string,",
+				"          UNIT_PRICE as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'documentPerLine') ~> Products",
+				"source(output(",
+				"          STORE_ID as string,",
+				"          STORE_NAME as string,",
+				"          WEB_ADDRESS as string,",
+				"          LATITUDE as string,",
+				"          LONGITUDE as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'documentPerLine') ~> Stores",
+				"source(output(",
+				"          ORDER_ID as string,",
+				"          ORDER_DATETIME as string,",
+				"          CUSTOMER_ID as string,",
+				"          ORDER_STATUS as string,",
+				"          STORE_ID as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> Orders",
+				"OrderItems cast(output(",
+				"          ORDER_ID as integer,",
+				"          LINE_ITEM_ID as integer,",
+				"          PRODUCT_ID as integer,",
+				"          UNIT_PRICE as float,",
+				"          QUANTITY as integer",
+				"     ),",
+				"     errors: true) ~> casttochangedatatype",
+				"Customers cast(output(",
+				"          CUSTOMER_ID as integer",
+				"     ),",
+				"     errors: true) ~> cast1",
+				"Products cast(output(",
+				"          PRODUCT_ID as integer,",
+				"          UNIT_PRICE as float",
+				"     ),",
+				"     errors: true) ~> cast2",
+				"Stores cast(output(",
+				"          STORE_ID as integer,",
+				"          LATITUDE as float,",
+				"          LONGITUDE as float",
+				"     ),",
+				"     errors: true) ~> cast3",
+				"Orders cast(output(",
+				"          ORDER_ID as integer,",
+				"          CUSTOMER_ID as integer,",
+				"          STORE_ID as integer",
+				"     ),",
+				"     errors: true) ~> cast4",
+				"cast4 derive(Ingestion_Date = currentDate(),",
+				"          ORDER_DATETIME = toTimestamp(ORDER_DATETIME, 'dd-MMM-yy HH.mm.ss.SS')) ~> derivedColumn1",
+				"casttochangedatatype derive(Ingestion_date = currentDate()) ~> derivedColumn2",
+				"cast1 derive(Ingestion_date = currentDate()) ~> derivedColumn3",
+				"cast2 derive(Ingestion_date = currentDate()) ~> derivedColumn4",
+				"cast3 derive(Ingestion_date = currentDate()) ~> derivedColumn5",
+				"derivedColumn2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1",
+				"derivedColumn3 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink2",
+				"derivedColumn4 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink3",
+				"derivedColumn5 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink4",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink5"
+			]
+		}
+	}
+}
