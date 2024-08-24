@@ -1,0 +1,17 @@
+{
+	"name": "ds_sftp_binary",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_Sftp",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "SftpLocation",
+				"folderPath": "/Customer Orders 3"
+			}
+		}
+	}
+}
