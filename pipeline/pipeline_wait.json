@@ -10,23 +10,6 @@
 				"typeProperties": {
 					"waitTimeInSeconds": 1
 				}
-			},
-			{
-				"name": "Fail1",
-				"type": "Fail",
-				"dependsOn": [
-					{
-						"activity": "Wait1",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"message": "PipelineFailed",
-					"errorCode": "6003"
-				}
 			}
 		],
 		"annotations": []
