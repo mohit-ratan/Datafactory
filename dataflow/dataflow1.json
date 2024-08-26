@@ -38,6 +38,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "source5"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_blob_input_employee",
+						"type": "DatasetReference"
+					},
+					"name": "source6"
 				}
 			],
 			"sinks": [
@@ -161,6 +168,16 @@
 				},
 				{
 					"name": "unpivot1"
+				},
+				{
+					"name": "flatten1"
+				},
+				{
+					"name": "flowlet1",
+					"flowlet": {
+						"referenceName": "flowlet1",
+						"type": "DataFlowReference"
+					}
 				}
 			],
 			"scriptLines": [
@@ -216,6 +233,21 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source5",
+				"source(output(",
+				"          EMPLOYEE_ID as string,",
+				"          FIRST_NAME as string,",
+				"          LAST_NAME as string,",
+				"          EMAIL as string,",
+				"          PHONE_NUMBER as string,",
+				"          HIRE_DATE as string,",
+				"          JOB_ID as string,",
+				"          SALARY as string,",
+				"          MANAGER_ID as string,",
+				"          DEPARTMENT_ID as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source6",
 				"source1 rank(desc(SALARY, true),",
 				"     output(rank as long)) ~> rank1",
 				"source1 window(over(DEPARTMENT_ID),",
@@ -242,8 +274,7 @@
 				"cast1 derive(ErrorCheck = isError()) ~> derivedColumn1",
 				"source1, source2 assert(expectExists(source1@DEPARTMENT_ID == source2@DEPARTMENT_ID, false, 'DateTrue'),",
 				"     expectUnique(EMPLOYEE_ID, false, 'Duplicates'),",
-				"     expectTrue(!isNull(toDate(HIRE_DATE, 'MM/dd/yyyy')), false, 'assert3'),",
-				"     expectExists(EMPLOYEE_ID == EMPLOYEE_ID, false, 'Truecheck')) ~> assert1",
+				"     expectTrue(!isNull(toDate(HIRE_DATE, 'MM/dd/yyyy')), false, 'assert3')) ~> assert1",
 				"assert1 filter(isError()) ~> filter1",
 				"source3 parse(skillsUpdated = skills ? (skill1 as string,",
 				"          skill2 as string,",
@@ -273,6 +304,23 @@
 				"          Vendor),",
 				"     lateral: true,",
 				"     ignoreNullPivots: false) ~> unpivot1",
+				"stringify1 foldDown(unroll(),",
+				"     mapColumn(",
+				"          id,",
+				"          name,",
+				"          skills,",
+				"          address,",
+				"          skillsUpdated",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1",
+				"source6 compose(mapColumn(",
+				"          Employee_ID = EMPLOYEE_ID,",
+				"          Department_ID = DEPARTMENT_ID,",
+				"          Salary = EMPLOYEE_ID,",
+				"          Name = LAST_NAME",
+				"     ),",
+				"     composition: 'flowlet1') ~> flowlet1@(temporary)",
 				"filter1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
@@ -342,7 +390,7 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> sink7",
-				"stringify1 sink(allowSchemaDrift: true,",
+				"flatten1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          ORDER_ID as string,",

@@ -1,0 +1,31 @@
+{
+	"name": "flowlet1",
+	"properties": {
+		"type": "Flowlet",
+		"typeProperties": {
+			"sources": [],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "input1"
+				}
+			],
+			"scriptLines": [
+				"input(output(",
+				"          Employee_ID as string,",
+				"          Department_ID as string,",
+				"          Salary as string,",
+				"          Name as string",
+				"     ),",
+				"     order: 0,",
+				"     allowSchemaDrift: true) ~> input1",
+				"input1 aggregate(groupBy(Employee_ID,",
+				"          Department_ID),",
+				"     sum = sum(toInteger(Salary))) ~> aggregate1"
+			]
+		}
+	}
+}
