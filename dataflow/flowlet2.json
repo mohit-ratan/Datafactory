@@ -1,0 +1,34 @@
+{
+	"name": "flowlet2",
+	"properties": {
+		"type": "Flowlet",
+		"typeProperties": {
+			"sources": [],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "input1"
+				}
+			],
+			"scriptLines": [
+				"input(output(",
+				"          Store_ID as string,",
+				"          Emp_Id as string,",
+				"          Dept_ID as string,",
+				"          Salary as string,",
+				"          StoreName as string,",
+				"          Department as string",
+				"     ),",
+				"     order: 0,",
+				"     allowSchemaDrift: true) ~> input1",
+				"input1 aggregate(groupBy(Store_ID,",
+				"          Emp_Id,",
+				"          Dept_ID),",
+				"     Salary = ERROR_FUNCTION('')) ~> aggregate1"
+			]
+		}
+	}
+}

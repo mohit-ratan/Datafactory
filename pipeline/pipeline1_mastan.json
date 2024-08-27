@@ -445,6 +445,26 @@
 								},
 								"traceLevel": "Fine"
 							}
+						},
+						{
+							"name": "Append variable1",
+							"type": "AppendVariable",
+							"dependsOn": [
+								{
+									"activity": "Data flow1",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
+							"userProperties": [],
+							"typeProperties": {
+								"variableName": "FileList",
+								"value": {
+									"value": "@item().name",
+									"type": "Expression"
+								}
+							}
 						}
 					]
 				}
@@ -545,6 +565,12 @@
 			},
 			"fileNameparquet": {
 				"type": "String"
+			},
+			"filestatus": {
+				"type": "String"
+			},
+			"FileList": {
+				"type": "Array"
 			}
 		},
 		"folder": {

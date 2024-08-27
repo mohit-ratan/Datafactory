@@ -178,6 +178,16 @@
 						"referenceName": "flowlet1",
 						"type": "DataFlowReference"
 					}
+				},
+				{
+					"name": "flowlet2",
+					"flowlet": {
+						"referenceName": "flowlet2",
+						"type": "DataFlowReference"
+					}
+				},
+				{
+					"name": "derivedColumn2"
 				}
 			],
 			"scriptLines": [
@@ -314,13 +324,23 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> flatten1",
-				"source6 compose(mapColumn(",
+				"flowlet2@temporary compose(mapColumn(",
 				"          Employee_ID = EMPLOYEE_ID,",
 				"          Department_ID = DEPARTMENT_ID,",
 				"          Salary = EMPLOYEE_ID,",
 				"          Name = LAST_NAME",
 				"     ),",
 				"     composition: 'flowlet1') ~> flowlet1@(temporary)",
+				"derivedColumn2 compose(mapColumn(",
+				"          Store_ID = EMPLOYEE_ID,",
+				"          Emp_Id = EMPLOYEE_ID,",
+				"          Dept_ID = EMPLOYEE_ID,",
+				"          Salary = EMPLOYEE_ID,",
+				"          StoreName = EMPLOYEE_ID,",
+				"          Department = EMPLOYEE_ID",
+				"     ),",
+				"     composition: 'flowlet2') ~> flowlet2@(temporary)",
+				"source6 derive(Store_ID = '') ~> derivedColumn2",
 				"filter1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
