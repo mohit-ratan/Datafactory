@@ -124,9 +124,30 @@
 						"type": "DatasetReference"
 					},
 					"name": "sink11"
+				},
+				{
+					"linkedService": {
+						"referenceName": "ls_AzureDataLakeStorage",
+						"type": "LinkedServiceReference"
+					},
+					"name": "sink12"
 				}
 			],
 			"transformations": [
+				{
+					"name": "flowlet1",
+					"flowlet": {
+						"referenceName": "flowlet1",
+						"type": "DataFlowReference"
+					}
+				},
+				{
+					"name": "flowlet2",
+					"flowlet": {
+						"referenceName": "flowlet2",
+						"type": "DataFlowReference"
+					}
+				},
 				{
 					"name": "rank1"
 				},
@@ -171,20 +192,6 @@
 				},
 				{
 					"name": "flatten1"
-				},
-				{
-					"name": "flowlet1",
-					"flowlet": {
-						"referenceName": "flowlet1",
-						"type": "DataFlowReference"
-					}
-				},
-				{
-					"name": "flowlet2",
-					"flowlet": {
-						"referenceName": "flowlet2",
-						"type": "DataFlowReference"
-					}
 				},
 				{
 					"name": "derivedColumn2"
@@ -258,6 +265,22 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source6",
+				"flowlet2@temporary compose(mapColumn(",
+				"          Employee_ID = EMPLOYEE_ID,",
+				"          Department_ID = DEPARTMENT_ID,",
+				"          Salary = EMPLOYEE_ID,",
+				"          Name = LAST_NAME",
+				"     ),",
+				"     composition: 'flowlet1') ~> flowlet1@(temporary)",
+				"derivedColumn2 compose(mapColumn(",
+				"          Store_ID = EMPLOYEE_ID,",
+				"          Emp_Id = EMPLOYEE_ID,",
+				"          Dept_ID = EMPLOYEE_ID,",
+				"          Salary = EMPLOYEE_ID,",
+				"          StoreName = EMPLOYEE_ID,",
+				"          Department = EMPLOYEE_ID",
+				"     ),",
+				"     composition: 'flowlet2') ~> flowlet2@(temporary)",
 				"source1 rank(desc(SALARY, true),",
 				"     output(rank as long)) ~> rank1",
 				"source1 window(over(DEPARTMENT_ID),",
@@ -324,22 +347,6 @@
 				"     ),",
 				"     skipDuplicateMapInputs: false,",
 				"     skipDuplicateMapOutputs: false) ~> flatten1",
-				"flowlet2@temporary compose(mapColumn(",
-				"          Employee_ID = EMPLOYEE_ID,",
-				"          Department_ID = DEPARTMENT_ID,",
-				"          Salary = EMPLOYEE_ID,",
-				"          Name = LAST_NAME",
-				"     ),",
-				"     composition: 'flowlet1') ~> flowlet1@(temporary)",
-				"derivedColumn2 compose(mapColumn(",
-				"          Store_ID = EMPLOYEE_ID,",
-				"          Emp_Id = EMPLOYEE_ID,",
-				"          Dept_ID = EMPLOYEE_ID,",
-				"          Salary = EMPLOYEE_ID,",
-				"          StoreName = EMPLOYEE_ID,",
-				"          Department = EMPLOYEE_ID",
-				"     ),",
-				"     composition: 'flowlet2') ~> flowlet2@(temporary)",
 				"source6 derive(Store_ID = '') ~> derivedColumn2",
 				"filter1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
@@ -457,7 +464,23 @@
 				"          LOCATION_ID as string",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink11"
+				"     skipDuplicateMapOutputs: true) ~> sink11",
+				"lookup1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'delta',",
+				"     mergeSchema: false,",
+				"     autoCompact: false,",
+				"     optimizedWrite: false,",
+				"     vacuum: 0,",
+				"     deletable: false,",
+				"     insertable: true,",
+				"     updateable: false,",
+				"     upsertable: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink12"
 			]
 		}
 	}
